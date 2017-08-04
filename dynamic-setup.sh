@@ -5,8 +5,8 @@
 
 DYNAMIC_DOMAIN="dynamic.name"
 DYNAMIC_API_DOMAIN="api.$DYNAMIC_DOMAIN"
-DYNAMIC_PING_DOMAIN="ping.$DYNAMIC_DOMAIN"
-DYNAMIC_PING6_DOMAIN="ping6.$DYNAMIC_DOMAIN"
+DYNAMIC_PING_DOMAIN="update.$DYNAMIC_DOMAIN"
+DYNAMIC_PING6_DOMAIN="update6.$DYNAMIC_DOMAIN"
 
 dynamic_get_credentials() {
 	unset DYNAMIC_USER DYNAMIC_PASS
@@ -76,9 +76,9 @@ dynamic_resolve() {
 }
 
 
-echo ".------------------------------------------."
+echo ".-------------------------------------------."
 echo "| Dynamic.name: Automatic Dynamic DNS Setup |"
-echo "\`------------------------------------------'"
+echo "\`-------------------------------------------'"
 
 
 # Contact the API to create or access a dynamic.name subdomain.

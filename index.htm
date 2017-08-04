@@ -67,15 +67,15 @@
 201 Created: Your initial passcode is: <b><i>XXXXXXXXXXXXXXXX</i></b></code></pre>
 				<blockquote>Assuming a successful response like above, copy the passcode returned to use in steps #2 and #3.</blockquote>
 				<h3>Step #2: Verify your subdomain updates properly</h3>
-				<pre><code>$ <span>nslookup -nosearch -type=A <b><i>XXXXXXXXXXXXXXXX</i></b>.<b><i>MYSUBDOMAIN</i></b>.dynamic.name ping.dynamic.name</span>
-Server:         ping.dynamic.name
+				<pre><code>$ <span>nslookup -nosearch -type=A <b><i>XXXXXXXXXXXXXXXX</i></b>.<b><i>MYSUBDOMAIN</i></b>.dynamic.name update.dynamic.name</span>
+Server:         update.dynamic.name
 Address:        XXX.XXX.XXX.XXX#53
 
 Name:   xxxxxxxxxxxxxxxx.mysubdomain.dynamic.name
 Address: XXX.XXX.XXX.XXX</code></pre>
 				<blockquote>Assuming a successful response like above, you should see your public-facing IP returned.</blockquote>
 				<h3>Step #3: Add cronjob to keep your IP updated</h3>
-				<pre class="pre-wordwrap"><code>$ <span>(crontab -l; echo "*/5 * * * * nslookup -nosearch -type=A <b><i>XXXXXXXXXXXXXXXX</i></b>.<b><i>MYSUBDOMAIN</i></b>.dynamic.name ping.dynamic.name") | crontab -</span></code></pre>
+				<pre class="pre-wordwrap"><code>$ <span>(crontab -l; echo "*/5 * * * * nslookup -nosearch -type=A <b><i>XXXXXXXXXXXXXXXX</i></b>.<b><i>MYSUBDOMAIN</i></b>.dynamic.name update.dynamic.name") | crontab -</span></code></pre>
 				<blockquote>This is the same command as in step #2, but now will run every 5 minutes to keep your IP current.</blockquote>
 				<h3>Step #4: Use your subdomain anywhere (example)</h3>
 				<pre><code>$ <span>ssh me@<b><i>MYSUBDOMAIN</i></b>.dynamic.name</span></code></pre>
@@ -123,29 +123,29 @@ Address: XXX.XXX.XXX.XXX</code></pre>
 					<p>After you've created your subdomain using the <a href="#api">API</a> you can update your subdomain's IP to the IP of the computer you're using with one of the following common system commands (<i><b>nslookup</b> or <b>host</b></i>). Make sure to replace <b>PASSCODE</b> (<i>not password!</i>) and <b>SUBDOMAIN</b> with your own values.</p>
 					<h3>IPv4:</h3>
 					<h6>Windows / OSX / UNIX:</h6>
-					<pre><code>nslookup -nosearch -type=A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name ping.dynamic.name</code></pre>
+					<pre><code>nslookup -nosearch -type=A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name update.dynamic.name</code></pre>
 					<h6>Linux / OSX / UNIX:</h6>
-					<pre><code>host -t A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name ping.dynamic.name</code></pre>
+					<pre><code>host -t A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name update.dynamic.name</code></pre>
 					<blockquote>If successful, your current IP will be returned. If not, an empty response or DNS error code will be returned.</blockquote>
 					<h3>IPv6:</h3>
 					<h6>Windows / Linux / OSX / UNIX:</h6>
-					<pre><code>nslookup -nosearch -type=AAAA <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name ping6.dynamic.name</code></pre>
+					<pre><code>nslookup -nosearch -type=AAAA <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name update6.dynamic.name</code></pre>
 					<h6>Linux / OSX / UNIX:</h6>
-					<pre><code>host -t AAAA <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name ping6.dynamic.name</code></pre>
+					<pre><code>host -t AAAA <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name update6.dynamic.name</code></pre>
 					<blockquote>If successful, your current IP will be returned. If not, an empty response or DNS error code will be returned.</blockquote>
 					<p>Once the command(s) above are executed successfully your subdomain (<i>ex. <b>subdomain</b>.dynamic.name</i>) will resolve to the IP the command was originally executed on.</p>
 					<h3 class="major">Automatic updates</h3>
 					<p>The final and most important step is to schedule a task to keep the IP up to date using <b>crontab</b> for UNIX-based OSes, or <b>schtasks</b> if you're using Windows.</p>
 					<h4>UNIX-based:</h4>
-					<pre class="pre-wordwrap"><code>(crontab -l; echo "*/5 * * * * nslookup -nosearch -type=A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name ping.dynamic.name") | crontab -</code></pre>
+					<pre class="pre-wordwrap"><code>(crontab -l; echo "*/5 * * * * nslookup -nosearch -type=A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name update.dynamic.name") | crontab -</code></pre>
 					<h4>Windows:</h4>
 					<p>If you have administrator (<b>SYSTEM</b>) access on the Windows machine, start cmd.exe with "<b>Run as administrator</b>" for the following command.</p>
-					<pre class="pre-wordwrap"><code>schtasks /create /tn "Dynamic.name IP Updater" /ru SYSTEM /tr "nslookup -nosearch -type=A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name ping.dynamic.name" /sc minute /mo 5</code></pre>
+					<pre class="pre-wordwrap"><code>schtasks /create /tn "Dynamic.name IP Updater" /ru SYSTEM /tr "nslookup -nosearch -type=A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name update.dynamic.name" /sc minute /mo 5</code></pre>
 					<p>If you don't have administrator access you can run it as a normal user, <b>however a command window will momentarily pop up every time it is run and will likely drive you insane</b>. As such, this will only update once an hour for this example.</p>
-					<pre class="pre-wordwrap"><code>schtasks /create /tn "Dynamic.name IP Updater" /tr "nslookup -nosearch -type=A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name ping.dynamic.name" /sc hourly</code></pre>
+					<pre class="pre-wordwrap"><code>schtasks /create /tn "Dynamic.name IP Updater" /tr "nslookup -nosearch -type=A <b><i>PASSCODE</i></b>.<b><i>SUBDOMAIN</i></b>.dynamic.name update.dynamic.name" /sc hourly</code></pre>
 					<h3 class="major">Update verification (optional)</h3>
 					<p>To verify your (<i>automatic</i>) updates are working consistently you may do a <b>TXT</b> lookup on your subdomain to show when the last update occurred.  For example:</p>
-					<pre><code>nslookup -nosearch -type=TXT <b><i>SUBDOMAIN</i></b>.dynamic.name ping.dynamic.name</code></pre>
+					<pre><code>nslookup -nosearch -type=TXT <b><i>SUBDOMAIN</i></b>.dynamic.name update.dynamic.name</code></pre>
 					<blockquote>If successful, the response would look something like &quot;<b>updated: 2000-01-01 00:00:00 -0400 (~ seconds ago)</b>&quot;</blockquote>
 					<h3 class="major">Advanced security (optional)</h3>
 					<p>By design, this service is at risk of Man-in-the-middle (<i>MITM</i>) attacks. This is due to the fact the passcode is transmitted in clear text over DNS, while it's unlikely to occur it is advised you have data like SSH keys saved in advance to detect such an event.</p>
@@ -171,19 +171,19 @@ Address: XXX.XXX.XXX.XXX</code></pre>
 					<h4>SHA1:</h4>
 					<pre class="pre-wordwrap"><code>echo -n &quot;<b>PASSCODE</b>:$(expr $(date +%s) / 1000)&quot; | sha1sum</code></pre>
 					<p>As a final (<i>UNIX-based</i>) example, the following one-liner will update your (IPv4) IP using a MD5 hash of your passcode, assuming you set <b>YOUR_SUDBDOMAIN</b> and <b>YOUR_PASSCODE</b> accordingly. </p>
-					<pre class="pre-wordwrap"><code>export SD="<b><i>YOUR_SUDBDOMAIN</i></b>" PC="<b><i>YOUR_PASSCODE</i></b>" &amp;&amp; nslookup -nosearch -type=A $(echo -n "$PC:$(expr $(date +%s) / 1000)" | md5sum | awk '{print $1".'$SD'.dynamic.name"}') ping.dynamic.name</code></pre>
+					<pre class="pre-wordwrap"><code>export SD="<b><i>YOUR_SUDBDOMAIN</i></b>" PC="<b><i>YOUR_PASSCODE</i></b>" &amp;&amp; nslookup -nosearch -type=A $(echo -n "$PC:$(expr $(date +%s) / 1000)" | md5sum | awk '{print $1".'$SD'.dynamic.name"}') update.dynamic.name</code></pre>
 					<h3 class="major">&quot;What is my IP?&quot; support (optional)</h3>
-					<p>For situations where you simply want to know the public IP of the system you're currently on, with no account needed, you can use the special subdomain <b>i.dynamic.name</b> to do so:</p>
+					<p>For situations where you simply want to know the public IP of the system you're currently on, with no account needed, you can use the special subdomain <b>my.dynamic.name</b> to do so:</p>
 					<h3>IPv4:</h3>
 					<h6>Windows / OSX / UNIX:</h6>
-					<pre><code>nslookup -nosearch -type=A i.dynamic.name ping.dynamic.name</code></pre>
+					<pre><code>nslookup -nosearch -type=A my.dynamic.name update.dynamic.name</code></pre>
 					<h6>Linux / OSX / UNIX:</h6>
-					<pre><code>host -t A i.dynamic.name ping.dynamic.name</code></pre>
+					<pre><code>host -t A my.dynamic.name update.dynamic.name</code></pre>
 					<h3>IPv6:</h3>
 					<h6>Windows / Linux / OSX / UNIX:</h6>
-					<pre><code>nslookup -nosearch -type=AAAA i.dynamic.name ping6.dynamic.name</code></pre>
+					<pre><code>nslookup -nosearch -type=AAAA my.dynamic.name update6.dynamic.name</code></pre>
 					<h6>Linux / OSX / UNIX:</h6>
-					<pre><code>host -t AAAA i.dynamic.name ping6.dynamic.name</code></pre>
+					<pre><code>host -t AAAA my.dynamic.name update6.dynamic.name</code></pre>
 				</section>
 			</article>
 		</div>
